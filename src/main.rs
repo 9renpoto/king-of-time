@@ -52,12 +52,17 @@ async fn main() -> Result<(), Error> {
     run(service_fn(handler)).await
 }
 
-#[tokio::test]
-async fn test_my_lambda_handler() {
-    let input = serde_json::from_str("{\"command\": \"Say Hi!\"}").expect("failed to parse event");
-    let context = lambda_runtime::Context::default();
+#[cfg(test)]
+mod tests {
+    use super::*;
+    #[tokio::test]
+    async fn test_my_lambda_handler() {
+        let input =
+            serde_json::from_str("{\"command\": \"Say Hi!\"}").expect("failed to parse event");
+        let context = lambda_runtime::Context::default();
 
-    let event = lambda_runtime::LambdaEvent::new(input, context);
+        let event = lambda_runtime::LambdaEvent::new(input, context);
 
-    handler(event).await.expect("failed to handle event");
+        handler(event).await.expect("failed to handle event");
+    }
 }
